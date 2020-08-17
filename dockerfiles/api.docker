@@ -1,0 +1,9 @@
+FROM python:3.8
+ADD https://github.com/salc1-org/salbot-api/archive/master.zip bot.zip
+RUN unzip bot.zip
+RUN mv salbot-api-master api
+WORKDIR api
+RUN pip install -r requirements.txt
+ENV database_uri=postgresql://salbot:salbot@database/salbot
+ENV debug=false
+CMD ["python", "run.py"]

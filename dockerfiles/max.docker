@@ -1,0 +1,15 @@
+FROM python:3.6
+ADD https://github.com/IBM/MAX-Toxic-Comment-Classifier/archive/master.zip workspace.zip
+RUN unzip workspace.zip
+RUN mv MAX-Toxic-Comment-Classifier-master max
+WORKDIR max
+RUN pip install maxfw flask-restx==0.1.1 flask-cors==3.0.7
+RUN pip install -r requirements.txt
+
+ARG model_bucket=https://max-cdn.cdn.appdomain.cloud/max-toxic-comment-classifier/1.0.0
+ARG model_file=assets.tar.gz
+
+RUN mkdir assets
+RUN wget -nv --show-progress --progress=bar:force:noscroll ${model_bucket}/${model_file} --output-document=assets/${model_file} && \
+  tar -x -C assets/ -f assets/${model_file} -v && rm assets/${model_file}
+CMD ["python", "app.py"]

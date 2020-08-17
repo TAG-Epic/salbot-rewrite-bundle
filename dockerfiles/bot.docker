@@ -1,0 +1,8 @@
+FROM python:3.8
+ADD https://github.com/salc1-org/salbot-rewrite/archive/master.zip bot.zip
+RUN unzip bot.zip
+RUN mv salbot-rewrite-master bot
+WORKDIR bot
+ADD ./config/bot-config.py config.py
+RUN pip install -r requirements.txt
+CMD ["python", "main.py"]
